@@ -5,16 +5,13 @@ import sklearn.linear_model
 from tkinter import *
 file_inf=""
 state1=""
-def file(file1,state):
-    global file_inf,state1
-    file_inf+=str(file1)
+def file(state):
+    global state1
     state1+=state
-    print(file_inf,state1)
+    
 
 def fun1():
-    global file_inf;
-    print(file_inf)
-    covid19_df=pd.read_csv(str(file_inf))
+    covid19_df=pd.read_csv("covid_19_india.csv")
     covid19_df_latest = covid19_df[covid19_df['State/UnionTerritory']==state1]
     covid19_df_latest.head()
     covid19_df_latest = covid19_df_latest.sort_values(by=['Confirmed'], ascending = True)
@@ -38,8 +35,8 @@ def state():
     temp1=statewise_df_latest['Positive'].sum()
     print("Positive cases: "+str(int(temp1)))
 def predict():
-    global file_inf,state1
-    covid19_df=pd.read_csv(file_inf)
+    global state1
+    covid19_df=pd.read_csv("covid_19_india.csv")
     covid19_df_latest = covid19_df[covid19_df['State/UnionTerritory']==state1]
     X=np.c_[covid19_df_latest['Deaths']]
     Y=np.c_[covid19_df_latest['Cured']]
@@ -50,13 +47,10 @@ def predict():
     print(model.predict(X_new))
 
 top=Tk()
-Label(top,text='Enter the file name').pack(side=TOP)
-ent=Entry(top)
-ent.pack(side=TOP)
 Label(top,text='Enter the state name').pack(side=TOP)
 ent1=Entry(top)
 ent1.pack(side=TOP)
-btn=Button(top,text="Submit",command= lambda:file(ent.get(),ent1.get()))
+btn=Button(top,text="Submit",command= lambda:file(ent1.get()))
 btn.pack(side=TOP)
 top.mainloop()
 fun1()
